@@ -31,6 +31,10 @@ namespace prog
     void fill(int x, int y, int w, int h, int r, int g, int b);
     void h_mirror();
     void v_mirror();
+    void add();
+    void crop();
+    void rotate_left();
+    void rotate_right();
   };
 }
 #endif

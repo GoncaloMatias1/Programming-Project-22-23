@@ -76,6 +76,22 @@ namespace prog {
             v_mirror();
             continue;
         }
+        if (command == "add"){
+            add();
+            continue;
+        }
+        if (command == "crop"){
+            crop();
+            continue;
+        }
+        if (command == "rotate_left"){
+            rotate_left();
+            continue;
+        }
+        if (command == "rotate_right"){
+            rotate_right();
+            continue;
+        }
         // TODO: Add any other commands here.
     }
 }
@@ -161,6 +177,55 @@ namespace prog {
             std::swap(image->at(x, y), image->at(x, height - 1 - y));
         }
     }
+    }
+    void Script::add(){
+        string filename;
+        int r,g,b,w,h;
+        input >> filename >> r >> g >> b >> w >> h;
+        Image* im = loadFromPNG(filename);
+        for (int y = 0; y < im->height() ; y++){
+            for (int x = 0; x < im->width(); x++){
+                if(!(im->at(x,y).red() == r && im->at(x,y).green() == g && im->at(x,y).blue() == b )){
+                    image->at(x + w, y + h) = im->at(x,y);
+                }
+            }
+        }
+        delete im;
+    }
+    
+    void Script::crop(){
+        int x,  y,  w,  h;
+        input >> x >> y >> w >> h;
+        Image* result = new Image(w, h);
+        for (int k = 0; k < h; k++){
+            for (int i = 0; i < w; i++){
+                result->at(i,k) = image->at(i + x, k + y);
+            }
+        }
+        delete image;
+        image = result;
+    }
+
+    void Script::rotate_left(){
+        Image* result = new Image(image->height(), image->width());
+        for (int x = 0; x < image->width(); x++){
+            for (int y = 0; y < image->height(); y++){
+                result->at(y, image->width() - 1 - x) = image->at(x,y);
+            }
+        }
+        delete image;
+        image = result;
+    }
+
+    void Script::rotate_right(){
+        Image* result = new Image(image->height(), image->width());
+        for (int x = 0; x < image->width(); x++){
+            for (int y = 0; y < image->height(); y++){
+                result->at(image->height() - 1 - y ,x) = image->at(x, y);
+            }
+        }
+        delete image;
+        image = result;
     }
 }
 
