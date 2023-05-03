@@ -13,7 +13,6 @@ namespace prog
     Script(const std::string &filename);
     ~Script();
     void run();
-    void median_filter();
   private:
     // Current image.
     Image *image;
@@ -36,6 +35,7 @@ namespace prog
     void crop();
     void rotate_left();
     void rotate_right();
+    void median_filter();
   };
 }
 #endif

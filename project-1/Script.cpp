@@ -3,6 +3,7 @@
 #include "Script.hpp"
 #include "PNG.hpp"
 #include "XPM2.hpp"
+#include <algorithm>
 
 using namespace std;
 
