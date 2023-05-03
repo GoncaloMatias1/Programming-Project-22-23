@@ -4,6 +4,7 @@
 #include "PNG.hpp"
 #include "XPM2.hpp"
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
