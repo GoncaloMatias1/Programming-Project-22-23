@@ -92,6 +92,10 @@ namespace prog {
             rotate_right();
             continue;
         }
+        if (command == "median_filter"){
+            median_filter();
+            continue;
+        }
         // TODO: Add any other commands here.
     }
 }
@@ -222,6 +226,46 @@ namespace prog {
         for (int x = 0; x < image->width(); x++){
             for (int y = 0; y < image->height(); y++){
                 result->at(image->height() - 1 - y ,x) = image->at(x, y);
+            }
+        }
+        delete image;
+        image = result;
+    }
+    void Script::median_filter(){
+        int ws;
+        input >> ws;
+        Image* result = new Image(image->width(), image->height());
+        for (int l = 0; l < image->height(); l++){
+            for (int c = 0; c < image->width(); c++){
+                std::vector<int> red, blue, green;
+
+                for (int i = std::max(0, l - ws / 2); i <= std::min(image->height() - 1, l + ws / 2); i++){
+                    for (int j = std::max(0, c - ws / 2); j <= std::min(image->width() - 1, c + ws / 2); j++){
+                            red.push_back(image->at(j,i).red());
+                            green.push_back(image->at(j,i).green());
+                            blue.push_back(image->at(j,i).blue());
+                        
+                    }
+                }
+
+                std::sort(red.begin(), red.end());
+                std::sort(green.begin(), green.end());
+                std::sort(blue.begin(), blue.end());
+                int mid = red.size() / 2;
+                if (red.size() % 2 == 0){
+                    int red_ = (red.at(mid - 1) + red.at(mid)) / 2;
+                    int green_ = (green.at(mid - 1) + green.at(mid)) / 2;
+                    int blue_ = (blue.at(mid - 1) + blue.at(mid)) / 2;
+                    Color pixel(red_, green_, blue_);
+                    result->at(c,l) = pixel;
+                }
+                else{
+                    int red_ = red.at(mid);
+                    int green_ = green.at(mid);
+                    int blue_ = blue.at(mid);
+                    Color pixel(red_, green_, blue_);
+                    result->at(c,l) = pixel;
+                }
             }
         }
         delete image;
