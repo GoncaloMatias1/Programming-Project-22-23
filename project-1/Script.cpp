@@ -95,7 +95,9 @@ namespace prog {
             continue;
         }
         if (command == "median_filter"){
-            median_filter();
+            int ws;
+            input >> ws;
+            median_filter(ws);
             continue;
         }
         // TODO: Add any other commands here.
@@ -233,39 +235,37 @@ namespace prog {
         delete image;
         image = result;
     }
-    void Script::median_filter(){
-        int ws;
-        input >> ws;
+    void Script::median_filter(int ws){
+        ws /= 2;
         Image* result = new Image(image->width(), image->height());
         for (int l = 0; l < image->height(); l++){
             for (int c = 0; c < image->width(); c++){
-                std::vector<int> red, blue, green;
+                std::vector<vector<int>> colors(3);
 
-                for (int i = std::max(0, l - ws / 2); i <= std::min(image->height() - 1, l + ws / 2); i++){
-                    for (int j = std::max(0, c - ws / 2); j <= std::min(image->width() - 1, c + ws / 2); j++){
-                            red.push_back(image->at(j,i).red());
-                            green.push_back(image->at(j,i).green());
-                            blue.push_back(image->at(j,i).blue());
-                        
+                for (int i = std::max(0, l - ws); i <= std::min(image->height() - 1, l + ws); i++){
+                    for (int j = std::max(0, c - ws); j <= std::min(image->width() - 1, c + ws); j++){
+                            colors[0].push_back(image->at(j,i).red());
+                            colors[1].push_back(image->at(j,i).green());
+                            colors[2].push_back(image->at(j,i).blue());
                     }
                 }
+                for (std::vector<int>& v : colors) {std::sort(v.begin(), v.end());}
 
-                std::sort(red.begin(), red.end());
-                std::sort(green.begin(), green.end());
-                std::sort(blue.begin(), blue.end());
-                int mid = red.size() / 2;
-                if (red.size() % 2 == 0){
-                    int red_ = (red.at(mid - 1) + red.at(mid)) / 2;
-                    int green_ = (green.at(mid - 1) + green.at(mid)) / 2;
-                    int blue_ = (blue.at(mid - 1) + blue.at(mid)) / 2;
-                    Color pixel(red_, green_, blue_);
+                int mid = colors[0].size() / 2;
+                if (colors[0].size() % 2 == 0){
+                //     int r = (colors[0].at(mid - 1) + colors[0].at(mid)) / 2;
+                //     int g = (colors[1].at(mid - 1) + colors[1].at(mid)) / 2;
+                //     int b = (colors[2].at(mid - 1) + colors[2].at(mid)) / 2;
+                //     Color pixel(r, g, b);
+                    Color pixel((colors[0].at(mid - 1) + colors[0].at(mid)) / 2, (colors[1].at(mid - 1) + colors[1].at(mid)) / 2, (colors[2].at(mid - 1) + colors[2].at(mid)) / 2);
                     result->at(c,l) = pixel;
                 }
                 else{
-                    int red_ = red.at(mid);
-                    int green_ = green.at(mid);
-                    int blue_ = blue.at(mid);
-                    Color pixel(red_, green_, blue_);
+                    // int r = colors[0].at(mid);
+                    // int g = colors[1].at(mid);
+                    // int b = colors[2].at(mid);
+                    // Color pixel(r, g, b);
+                    Color pixel(colors[0].at(mid), colors[1].at(mid), colors[2].at(mid));
                     result->at(c,l) = pixel;
                 }
             }
