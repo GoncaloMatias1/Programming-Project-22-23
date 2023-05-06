@@ -31,11 +31,12 @@ namespace prog
     void fill(int x, int y, int w, int h, int r, int g, int b);
     void h_mirror();
     void v_mirror();
-    void add();
-    void crop();
+    void add(std::string filename, int r, int g, int b, int w, int h);
+    void crop(int x, int y, int w, int h);
     void rotate_left();
     void rotate_right();
     void median_filter(int ws);
   };
 }
 #endif
+

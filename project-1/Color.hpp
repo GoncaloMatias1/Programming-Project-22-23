@@ -10,6 +10,7 @@ namespace prog
       rgb_value red_;
       rgb_value green_;
       rgb_value blue_;
+
     public:
       Color();
       Color(const Color& c);
@@ -20,6 +21,13 @@ namespace prog
       rgb_value& green();
       rgb_value blue() const;
       rgb_value& blue();
+
+      void copy_pixel(Color& pixel);
+      void invert_pixel();
+      void average_pixel();
+      void swap_colors(rgb_value r, rgb_value g, rgb_value b);
+      void swap_pixel(Color& pixel);
+      bool equal_pixel(rgb_value r, rgb_value g, rgb_value b);
   };
 }
 #endif

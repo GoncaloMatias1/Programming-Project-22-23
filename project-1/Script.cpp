@@ -3,8 +3,6 @@
 #include "Script.hpp"
 #include "PNG.hpp"
 #include "XPM2.hpp"
-#include <algorithm>
-#include <vector>
 
 using namespace std;
 
@@ -79,11 +77,16 @@ namespace prog {
             continue;
         }
         if (command == "add"){
-            add();
+            std::string filename;
+            int r,g,b,w,h;
+            input >> filename >> r >> g >> b >> w >> h;
+            add(filename, r, g, b, w, h);
             continue;
         }
         if (command == "crop"){
-            crop();
+            int x,  y,  w,  h;
+            input >> x >> y >> w >> h;
+            crop(x, y, w, h);
             continue;
         }
         if (command == "rotate_left"){
@@ -125,153 +128,62 @@ namespace prog {
         input >> filename;
         saveToPNG(filename, image);
     }
-    void Script::invert() {
-    for (int y = 0; y < image->height(); y++) {
-        for (int x = 0; x < image->width(); x++) {
-            Color &pixel = image->at(x, y);
-            pixel.red() = 255 - pixel.red();
-            pixel.green() = 255 - pixel.green();
-            pixel.blue() = 255 - pixel.blue();
-        }
+
+    void Script::invert(){
+        image->invert_image();
     }
+
+    void Script::to_gray_scale(){
+        image->to_gray_scale();
     }
-    void Script::to_gray_scale() {
-    for (int y = 0; y < image->height(); y++) {
-        for (int x = 0; x < image->width(); x++) {
-            Color &pixel = image->at(x, y);
-            int v = (pixel.red() + pixel.green() + pixel.blue()) / 3;
-            pixel.red() = v;
-            pixel.green() = v;
-            pixel.blue() = v;
-        }
-    }
-    }
+
     void Script::replace(int r1, int g1, int b1, int r2, int g2, int b2) {
-    for (int y = 0; y < image->height(); y++) {
-        for (int x = 0; x < image->width(); x++) {
-            Color &pixel = image->at(x, y);
-            if (pixel.red() == r1 && pixel.green() == g1 && pixel.blue() == b1) {
-                pixel.red() = r2;
-                pixel.green() = g2;
-                pixel.blue() = b2;
-            }
-        }
+        image->replace(r1, g1, b1, r2, g2, b2);
     }
-    }
+
     void Script::fill(int x, int y, int w, int h, int r, int g, int b) {
-    for (int j = y; j < y + h; j++) {
-        for (int i = x; i < x + w; i++) {
-            Color &pixel = image->at(i, j);
-            pixel.red() = r;
-            pixel.green() = g;
-            pixel.blue() = b;
-        }
+        image->fill(x, y, w, h, r, g, b);
     }
-    }
+    
     void Script::h_mirror() {
-    int width = image->width();
-    int height = image->height();
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width / 2; x++) {
-            std::swap(image->at(x, y), image->at(width - 1 - x, y));
-        }
+        image->h_mirror();
     }
-    }
+
     void Script::v_mirror() {
-    int width = image->width();
-    int height = image->height();
-    for (int y = 0; y < height / 2; y++) {
-        for (int x = 0; x < width; x++) {
-            std::swap(image->at(x, y), image->at(x, height - 1 - y));
-        }
+        image->v_mirror();
     }
-    }
-    void Script::add(){
-        string filename;
-        int r,g,b,w,h;
-        input >> filename >> r >> g >> b >> w >> h;
+
+    void Script::add(std::string filename, int r, int g, int b, int w, int h){
         Image* im = loadFromPNG(filename);
-        for (int y = 0; y < im->height() ; y++){
-            for (int x = 0; x < im->width(); x++){
-                if(!(im->at(x,y).red() == r && im->at(x,y).green() == g && im->at(x,y).blue() == b )){
-                    image->at(x + w, y + h) = im->at(x,y);
-                }
-            }
-        }
+        image->add(im, r, g, b, w, h);
         delete im;
     }
     
-    void Script::crop(){
-        int x,  y,  w,  h;
-        input >> x >> y >> w >> h;
-        Image* result = new Image(w, h);
-        for (int k = 0; k < h; k++){
-            for (int i = 0; i < w; i++){
-                result->at(i,k) = image->at(i + x, k + y);
-            }
-        }
+    void Script::crop(int x, int y, int w, int h){
+        Image* im = new Image(w, h);
+        image->crop(im, x, y, w, h);
         delete image;
-        image = result;
+        image = im;
     }
 
     void Script::rotate_left(){
-        Image* result = new Image(image->height(), image->width());
-        for (int x = 0; x < image->width(); x++){
-            for (int y = 0; y < image->height(); y++){
-                result->at(y, image->width() - 1 - x) = image->at(x,y);
-            }
-        }
+        Image* im= new Image(image->height(), image->width());
+        image->rotate(im, 0);
         delete image;
-        image = result;
+        image = im;
     }
 
     void Script::rotate_right(){
-        Image* result = new Image(image->height(), image->width());
-        for (int x = 0; x < image->width(); x++){
-            for (int y = 0; y < image->height(); y++){
-                result->at(image->height() - 1 - y ,x) = image->at(x, y);
-            }
-        }
+        Image* im = new Image(image->height(), image->width());
+        image->rotate(im, 1);
         delete image;
-        image = result;
+        image = im;
     }
+
     void Script::median_filter(int ws){
-        ws /= 2;
-        Image* result = new Image(image->width(), image->height());
-        for (int l = 0; l < image->height(); l++){
-            for (int c = 0; c < image->width(); c++){
-                std::vector<vector<int>> colors(3);
-
-                for (int i = std::max(0, l - ws); i <= std::min(image->height() - 1, l + ws); i++){
-                    for (int j = std::max(0, c - ws); j <= std::min(image->width() - 1, c + ws); j++){
-                            colors[0].push_back(image->at(j,i).red());
-                            colors[1].push_back(image->at(j,i).green());
-                            colors[2].push_back(image->at(j,i).blue());
-                    }
-                }
-                for (std::vector<int>& v : colors) {std::sort(v.begin(), v.end());}
-
-                int mid = colors[0].size() / 2;
-                if (colors[0].size() % 2 == 0){
-                //     int r = (colors[0].at(mid - 1) + colors[0].at(mid)) / 2;
-                //     int g = (colors[1].at(mid - 1) + colors[1].at(mid)) / 2;
-                //     int b = (colors[2].at(mid - 1) + colors[2].at(mid)) / 2;
-                //     Color pixel(r, g, b);
-                    Color pixel((colors[0].at(mid - 1) + colors[0].at(mid)) / 2, (colors[1].at(mid - 1) + colors[1].at(mid)) / 2, (colors[2].at(mid - 1) + colors[2].at(mid)) / 2);
-                    result->at(c,l) = pixel;
-                }
-                else{
-                    // int r = colors[0].at(mid);
-                    // int g = colors[1].at(mid);
-                    // int b = colors[2].at(mid);
-                    // Color pixel(r, g, b);
-                    Color pixel(colors[0].at(mid), colors[1].at(mid), colors[2].at(mid));
-                    result->at(c,l) = pixel;
-                }
-            }
-        }
+        Image* im = new Image(image->width(), image->height());
+        image->median_filter(im, ws);
         delete image;
-        image = result;
+        image = im;
     }
 }
-

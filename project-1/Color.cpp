@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Color.hpp"
 
 namespace prog {
@@ -13,24 +14,39 @@ namespace prog {
     }
     Color::Color(rgb_value red, rgb_value green, rgb_value blue) : red_(red), green_(green), blue_(blue) {}
 
-    rgb_value Color::red() const {
-        return red_;
-    }
-    rgb_value Color::green() const {
-        return green_;
-    }
-    rgb_value Color::blue() const {
-        return blue_;
+    rgb_value Color::red() const {return red_;}
+    rgb_value Color::green() const {return green_;}
+    rgb_value Color::blue() const {return blue_;}
+
+    rgb_value& Color::red() {return red_;}
+    rgb_value& Color::green() {return green_;}
+    rgb_value& Color::blue() {return blue_;}
+
+    void Color::invert_pixel(){
+        red_ = 255 - red_;
+        green_ = 255 - green_;
+        blue_ = 255 - blue_;
     }
 
-    rgb_value& Color::red()  {
-        return red_;
+    void Color::average_pixel(){
+        red_ = green_ = blue_ = (red_ + green_ + blue_) / 3;
     }
-    rgb_value& Color::green()  {
-      return green_;
+
+    void Color::copy_pixel(Color& pixel){
+        *this = pixel;
     }
-    rgb_value& Color::blue()  {
-      return blue_;
+
+    void Color::swap_colors(rgb_value r, rgb_value g, rgb_value b){
+        red_ = r;
+        green_ = g;
+        blue_ = b;
+    }
+
+    void Color::swap_pixel(Color& pixel){
+        std::swap(*this, pixel);
+    }
+
+    bool Color::equal_pixel(rgb_value r, rgb_value g, rgb_value b){
+        return (red_  == r and green_ == g and blue_ == b) ? true : false;
     }
 }
-
