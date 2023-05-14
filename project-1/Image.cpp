@@ -143,4 +143,16 @@ namespace prog{
       }
     }
   }
+
+  void Image::pixel_to_char(std::map<Color, char>& simbols) const{
+    char simbol = '!';
+    for (int line = 0; line < l; line++){
+      for (int col = 0; col < c; col++){
+        if (simbols.find(p[line][col]) != simbols.end()){
+          simbols[p[line][col]] = simbol;
+          simbol++;
+        }
+      }
+    }
+  }
 }

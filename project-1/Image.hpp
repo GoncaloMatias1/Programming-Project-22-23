@@ -1,6 +1,7 @@
 #ifndef prog_Image_hpp
 #define prog_Image_hpp
 #include "Color.hpp"
+#include <map>
 
 namespace prog
 {
@@ -30,6 +31,7 @@ namespace prog
     void rotate(Image* im, int direction); // 0 -> left, 1-> right
     void median_filter(Image* im, int window);
     Color find_median(int pos_l, int pos_c, int window);
+    void pixel_to_char(std::map<Color, char>& simbols) const;
   };
 }
 #endif

@@ -1,5 +1,7 @@
 #ifndef __prog_Color_hpp__
 #define __prog_Color_hpp__
+#include <string>
+#include <sstream>
 
 namespace prog
 {
@@ -28,6 +30,9 @@ namespace prog
       void swap_colors(rgb_value r, rgb_value g, rgb_value b);
       void swap_pixel(Color& pixel);
       bool equal_pixel(rgb_value r, rgb_value g, rgb_value b);
+      const void pixel_to_hex(std::string& value) const;
+      bool operator<(const Color& a) const;
   };
 }
 #endif
+

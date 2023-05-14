@@ -49,4 +49,20 @@ namespace prog {
     bool Color::equal_pixel(rgb_value r, rgb_value g, rgb_value b){
         return (red_  == r and green_ == g and blue_ == b) ? true : false;
     }
+
+    const void Color::pixel_to_hex(std::string& value) const{
+        std::ostringstream result;
+        result << '#';
+        result << std::hex << red_
+               << std::hex << green_
+               << std::hex << blue_;
+        value = result.str();
+    }
+
+    bool Color::operator<(const Color& a) const{
+        if (red_ < a.red_) return true;
+        else if (red_ == a.red_ and green_ < a.green_) return true;
+        else if (red_ == a.red_ and green_ == a.green_ and blue_ < a.blue_) return true;
+        return false;
+    }
 }

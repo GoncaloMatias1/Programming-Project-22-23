@@ -103,6 +103,16 @@ namespace prog {
             median_filter(ws);
             continue;
         }
+        if (command == "xpm2_open"){
+            std::string filename;
+            input >> filename;
+            xpm2_open(filename);
+        }
+        if (command == "xpm2_save"){
+            std::string filename;
+            input >> filename;
+            xpm2_save(filename);
+        }
         // TODO: Add any other commands here.
     }
 }
@@ -185,5 +195,14 @@ namespace prog {
         image->median_filter(im, ws);
         delete image;
         image = im;
+    }
+
+    void Script::xpm2_open(const std::string filename){
+        delete image;
+        image = loadFromXPM2(filename);
+    }
+
+    void Script::xpm2_save(const std::string& filename){
+        saveToXPM2(filename, image);
     }
 }
