@@ -40,7 +40,6 @@ namespace prog {
                 im->at(c,l).copy_pixel(colors[line[c]]);
             }
         }
-
         return im;
     }
 
@@ -50,18 +49,20 @@ namespace prog {
         XPM2.open(file);
         image->pixel_to_char(simbols);
         XPM2 << "! XPM2" << "\n";
-        for (auto pair : simbols){
+        XPM2 << image->width() << " " << image->height() << " " << simbols.size() << " 1" << "\n";
+        for (auto& pair : simbols){
             std::string value;
             pair.first.pixel_to_hex(value);
             XPM2 << pair.second << " c " << value;
+            XPM2 << "\n";
         }
         for (int line = 0; line < image->height(); line++){
-            XPM2 << "\n";
             for (int col = 0; col < image->width(); col++){
                 XPM2 << simbols[image->at(col, line)];
             }
+            XPM2 << "\n";
         }
         XPM2.close();
+        // image->fill_xpm2(file, simbols);
     }
 }
-

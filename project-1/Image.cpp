@@ -1,6 +1,7 @@
 #include "Image.hpp"
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
 namespace prog{
   Image::Image(int columns, int lines, const Color &fill){
@@ -148,11 +149,23 @@ namespace prog{
     char simbol = '!';
     for (int line = 0; line < l; line++){
       for (int col = 0; col < c; col++){
-        if (simbols.find(p[line][col]) != simbols.end()){
+        if (simbols.find(p[line][col]) == simbols.end()){
           simbols[p[line][col]] = simbol;
           simbol++;
         }
       }
     }
   }
+
+  // void Image::fill_xpm2(const std::string& file, std::map<Color, char>& simbols) const{
+  //   std::ofstream XPM2;
+  //   XPM2.open(file);
+  //   for (int line = 0; line < l; line++){
+  //     for (int col = 0; col < c; col++){
+  //       XPM2 << simbols[p[line][col]];
+  //     }
+  //     XPM2 << "\n";
+  //   }
+  //   XPM2.close();
+  // }
 }

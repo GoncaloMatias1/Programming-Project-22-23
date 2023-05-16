@@ -111,7 +111,7 @@ namespace prog {
         if (command == "xpm2_save"){
             std::string filename;
             input >> filename;
-            xpm2_save(filename);
+            xpm2_save(filename, image);
         }
         // TODO: Add any other commands here.
     }
@@ -202,7 +202,7 @@ namespace prog {
         image = loadFromXPM2(filename);
     }
 
-    void Script::xpm2_save(const std::string& filename){
-        saveToXPM2(filename, image);
+    void Script::xpm2_save(const std::string& filename, const Image* p){
+        saveToXPM2(filename, p);
     }
 }

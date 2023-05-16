@@ -32,6 +32,7 @@ namespace prog
     void median_filter(Image* im, int window);
     Color find_median(int pos_l, int pos_c, int window);
     void pixel_to_char(std::map<Color, char>& simbols) const;
+    // void fill_xpm2(const std::string& file, std::map<Color, char>& simbols) const;
   };
 }
 #endif

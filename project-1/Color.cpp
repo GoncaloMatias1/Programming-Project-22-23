@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iomanip>
 #include "Color.hpp"
 
 namespace prog {
@@ -53,9 +54,9 @@ namespace prog {
     const void Color::pixel_to_hex(std::string& value) const{
         std::ostringstream result;
         result << '#';
-        result << std::hex << red_
-               << std::hex << green_
-               << std::hex << blue_;
+        result << std::hex << std::setw(2) << std::setfill('0') << (int) red_
+               << std::hex << std::setw(2) << std::setfill('0') << (int) green_
+               << std::hex << std::setw(2) << std::setfill('0') << (int) blue_;
         value = result.str();
     }
 
