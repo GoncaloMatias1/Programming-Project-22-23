@@ -18,7 +18,6 @@ namespace prog {
     rgb_value Color::red() const {return red_;}
     rgb_value Color::green() const {return green_;}
     rgb_value Color::blue() const {return blue_;}
-
     rgb_value& Color::red() {return red_;}
     rgb_value& Color::green() {return green_;}
     rgb_value& Color::blue() {return blue_;}

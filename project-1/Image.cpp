@@ -7,7 +7,6 @@ namespace prog{
   Image::Image(int columns, int lines, const Color &fill){
     c = columns;
     l = lines;
-
     Color** pointer = new Color*[l];
     for (int index = 0; index < l; index++) {pointer[index] = new Color[c];}
 
