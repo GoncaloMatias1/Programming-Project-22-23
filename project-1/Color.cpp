@@ -18,6 +18,7 @@ namespace prog {
     rgb_value Color::red() const {return red_;}
     rgb_value Color::green() const {return green_;}
     rgb_value Color::blue() const {return blue_;}
+
     rgb_value& Color::red() {return red_;}
     rgb_value& Color::green() {return green_;}
     rgb_value& Color::blue() {return blue_;}
@@ -36,7 +37,7 @@ namespace prog {
         *this = pixel;
     }
 
-    void Color::swap_colors(rgb_value r, rgb_value g, rgb_value b){
+    void Color::copy_colors(rgb_value r, rgb_value g, rgb_value b){
         red_ = r;
         green_ = g;
         blue_ = b;
@@ -46,7 +47,7 @@ namespace prog {
         std::swap(*this, pixel);
     }
 
-    bool Color::equal_pixel(rgb_value r, rgb_value g, rgb_value b){
+    bool Color::equal_pixel(rgb_value r, rgb_value g, rgb_value b) const{
         return (red_  == r and green_ == g and blue_ == b) ? true : false;
     }
 

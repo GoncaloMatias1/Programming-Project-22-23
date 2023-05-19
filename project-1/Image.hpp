@@ -20,19 +20,25 @@ namespace prog
     Color &at(int x, int y);
     const Color &at(int x, int y) const;
 
-    void invert_image();
-    void to_gray_scale();
-    void replace(int r1, int g1, int b1, int r2, int g2, int b2);
-    void fill(int x, int y, int w, int h, int r, int g, int b);
-    void h_mirror();
-    void v_mirror();
-    void add(Image* im, int r, int g, int b, int w, int h);
-    void crop(Image* im, int x, int y, int w, int h);
-    void rotate(Image* im, int direction); // 0 -> left, 1-> right
-    void median_filter(Image* im, int window);
-    Color find_median(int pos_l, int pos_c, int window);
+    Color** create_array(int w, int h);
+    void clear_array();
+    void swap_PrivParameters(int lines, int collumns, Color** array);
+    void invert_image() const;
+    void to_gray_scale() const;
+    void replace(int r1, int g1, int b1, int r2, int g2, int b2) const;
+    void fill(int x, int y, int w, int h, int r, int g, int b) const;
+    void h_mirror() const;
+    void v_mirror() const;
+    void add(const std::string& file, int r, int g, int b, int w, int h) const;
+    void crop(int x, int y, int w, int h);
+    /**
+     * direction = 0 -> left
+     * direction = 1 -> right
+    */
+    void rotate(int direction);
+    void median_filter(const int& swindow);
+    Color find_median(const int& pos_l, const int& pos_c, const int& window) const;
     void pixel_to_char(std::map<Color, char>& simbols) const;
-    // void fill_xpm2(const std::string& file, std::map<Color, char>& simbols) const;
   };
 }
 #endif

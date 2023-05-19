@@ -30,7 +30,7 @@ namespace prog {
             r = std::stoi(value.substr(1, 2), 0, 16);
             g = std::stoi(value.substr(3, 2), 0, 16);
             b = std::stoi(value.substr(5, 2), 0, 16);
-            colors[simbol].swap_colors(r, g, b);
+            colors[simbol].copy_colors(r, g, b);
         }
 
         Image* im = new Image(w,h);
@@ -63,6 +63,6 @@ namespace prog {
             XPM2 << "\n";
         }
         XPM2.close();
-        // image->fill_xpm2(file, simbols);
     }
 }
+

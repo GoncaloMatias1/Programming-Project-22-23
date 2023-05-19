@@ -100,6 +100,7 @@ namespace prog {
         if (command == "median_filter"){
             int ws;
             input >> ws;
+            ws /= 2;
             median_filter(ws);
             continue;
         }
@@ -111,7 +112,7 @@ namespace prog {
         if (command == "xpm2_save"){
             std::string filename;
             input >> filename;
-            xpm2_save(filename, image);
+            xpm2_save(filename);
         }
         // TODO: Add any other commands here.
     }
@@ -164,45 +165,31 @@ namespace prog {
     }
 
     void Script::add(std::string filename, int r, int g, int b, int w, int h){
-        Image* im = loadFromPNG(filename);
-        image->add(im, r, g, b, w, h);
-        delete im;
+        image->add(filename, r, g, b, w, h);
     }
     
     void Script::crop(int x, int y, int w, int h){
-        Image* im = new Image(w, h);
-        image->crop(im, x, y, w, h);
-        delete image;
-        image = im;
+        image->crop(x, y, w, h);
     }
 
     void Script::rotate_left(){
-        Image* im= new Image(image->height(), image->width());
-        image->rotate(im, 0);
-        delete image;
-        image = im;
+        image->rotate(0);
     }
 
     void Script::rotate_right(){
-        Image* im = new Image(image->height(), image->width());
-        image->rotate(im, 1);
-        delete image;
-        image = im;
+        image->rotate(1);
     }
 
     void Script::median_filter(int ws){
-        Image* im = new Image(image->width(), image->height());
-        image->median_filter(im, ws);
-        delete image;
-        image = im;
+        image->median_filter(ws);
     }
 
     void Script::xpm2_open(const std::string filename){
-        delete image;
+        clear_image_if_any();
         image = loadFromXPM2(filename);
     }
 
-    void Script::xpm2_save(const std::string& filename, const Image* p){
-        saveToXPM2(filename, p);
+    void Script::xpm2_save(const std::string& filename){
+        saveToXPM2(filename, image);
     }
 }
